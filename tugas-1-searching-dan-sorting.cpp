@@ -37,11 +37,17 @@ void inputBuku() {
         system("pause");
         return;
     }
-    cin.ignore(); // Mengabaikan karakter newline yang tersisa di buffer input
+    cin.ignore();
     cout << "\nMasukkan Judul Buku: ";
-    getline(cin, daftarBuku[jumlahBuku].judul); // Menggunakan getline untuk membaca judul buku
-    cout << "Masukkan Tahun Terbit: ";
-    cin >> daftarBuku[jumlahBuku].tahun;
+    getline(cin, daftarBuku[jumlahBuku].judul);
+    int tahunInput;
+    while (true) {
+        cout << "Masukkan Tahun Terbit (1900 - 2025): ";
+        cin >> tahunInput;
+        if (tahunInput >= 1900 && tahunInput <= 2025) break;
+        cout << "Tahun tidak valid. Mohon masukkan antara 1900 hingga 2025.\n";
+    }
+    daftarBuku[jumlahBuku].tahun = tahunInput;
     jumlahBuku++;
     cout << "\nBuku berhasil ditambahkan!\n";
     system("pause");
@@ -60,7 +66,7 @@ void bubbleSort(Buku arr[], int size) {
     for (int i = 0; i < size - 1; i++) {
         for (int j = 0; j < size - i - 1; j++) {
             if (arr[j].tahun > arr[j + 1].tahun) {
-                swap(arr[j], arr[j + 1]); // Menukar elemen jika tidak dalam urutan yang benar
+                swap(arr[j], arr[j + 1]);
             }
         }
     }
@@ -68,22 +74,22 @@ void bubbleSort(Buku arr[], int size) {
 
 // Quick Sort
 int partition(Buku arr[], int low, int high) {
-    int pivot = arr[high].tahun; // Memilih elemen pivot
+    int pivot = arr[high].tahun;
     int i = low - 1;
     for (int j = low; j < high; j++) {
         if (arr[j].tahun < pivot) {
             i++;
-            swap(arr[i], arr[j]); // Menukar elemen yang lebih kecil dari pivot ke kiri
+            swap(arr[i], arr[j]);
         }
     }
-    swap(arr[i + 1], arr[high]); // Menempatkan pivot pada posisi yang benar
+    swap(arr[i + 1], arr[high]);
     return i + 1;
 }
 void quickSort(Buku arr[], int low, int high) {
     if (low < high) {
-        int pi = partition(arr, low, high); // Mendapatkan indeks pivot
-        quickSort(arr, low, pi - 1); // Mengurutkan bagian kiri pivot
-        quickSort(arr, pi + 1, high); // Mengurutkan bagian kanan pivot
+        int pi = partition(arr, low, high);
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
     }
 }
 
@@ -106,14 +112,14 @@ int binarySearch(Buku arr[], int size, int tahun) {
     while (kiri <= kanan) {
         int tengah = kiri + (kanan - kiri) / 2;
         if (arr[tengah].tahun == tahun) {
-            return tengah; // Mengembalikan indeks jika ditemukan
+            return tengah;
         } else if (arr[tengah].tahun < tahun) {
-            kiri = tengah + 1; // Mencari di bagian kanan
+            kiri = tengah + 1;
         } else {
-            kanan = tengah - 1; // Mencari di bagian kiri
+            kanan = tengah - 1;
         }
     }
-    return -1; // Mengembalikan -1 jika tidak ditemukan
+    return -1;
 }
 
 // Menu utama
@@ -143,8 +149,8 @@ int main() {
             case 3: {
                 system("cls");
                 Buku temp[MAX_BUKU];
-                salinArray(daftarBuku, temp, jumlahBuku); // Menyalin array buku
-                bubbleSort(temp, jumlahBuku); // Mengurutkan dengan Bubble Sort
+                salinArray(daftarBuku, temp, jumlahBuku);
+                bubbleSort(temp, jumlahBuku);
                 tampilkanBuku(daftarBuku, jumlahBuku, "Daftar Buku (Belum Urut)");
                 tampilkanBuku(temp, jumlahBuku, "Daftar Buku (Setelah Bubble Sort)");
                 system("pause");
@@ -153,8 +159,8 @@ int main() {
             case 4: {
                 system("cls");
                 Buku temp[MAX_BUKU];
-                salinArray(daftarBuku, temp, jumlahBuku); // Menyalin array buku
-                quickSort(temp, 0, jumlahBuku - 1); // Mengurutkan dengan Quick Sort
+                salinArray(daftarBuku, temp, jumlahBuku);
+                quickSort(temp, 0, jumlahBuku - 1);
                 tampilkanBuku(daftarBuku, jumlahBuku, "Daftar Buku (Belum Urut)");
                 tampilkanBuku(temp, jumlahBuku, "Daftar Buku (Setelah Quick Sort)");
                 system("pause");
@@ -168,9 +174,9 @@ int main() {
             case 6: {
                 cout << "\nMasukkan Tahun Terbit: "; cin >> tahun;
                 Buku temp[MAX_BUKU];
-                salinArray(daftarBuku, temp, jumlahBuku); // Menyalin array buku
-                quickSort(temp, 0, jumlahBuku - 1); // Mengurutkan dengan Quick Sort
-                int hasil = binarySearch(temp, jumlahBuku, tahun); // Mencari dengan Binary Search
+                salinArray(daftarBuku, temp, jumlahBuku);
+                quickSort(temp, 0, jumlahBuku - 1);
+                int hasil = binarySearch(temp, jumlahBuku, tahun);
                 if (hasil != -1)
                     cout << "\nDitemukan: " << temp[hasil].judul << " (" << temp[hasil].tahun << ")\n";
                 else
